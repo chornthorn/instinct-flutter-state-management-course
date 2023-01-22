@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
-
-import 'helpers/base_change_notifier_provider.dart';
-import 'providers/config_model.dart';
-import 'providers/home_change_notifier.dart';
-import 'providers/post_change_notifier_provider.dart';
-import 'providers/user_provider.dart';
+import 'package:flutter_state_management/providers/home_provider.dart';
+import 'package:flutter_state_management/providers/post_provider.dart';
+import 'package:flutter_state_management/providers/user_provider.dart';
+import 'package:flutter_state_management/views/main_page.dart';
+import 'package:provider/provider.dart';
 import 'views/home_page.dart';
 
 void main() {
   runApp(
-    ConfigModel(
-      config: const {
-        'title': 'Flutter State Management',
-        'appBarColor': Colors.red,
-        'name': 'Flutter',
-      },
-      child: MultiChangeNotifierProvider(
-        changeNotifiers: [
-          HomeChangeNotifier(),
-          PostChangeNotifierProvider(),
-          UserChangeNotifier(),
-        ],
-        child: const MyApp(),
-      ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeChangeNotifier()),
+        ChangeNotifierProvider(create: (_) => PostChangeNotifierProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: const MyApp(),
     ),
   );
 }
@@ -33,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePage(),
+      home: MainPage(),
     );
   }
 }

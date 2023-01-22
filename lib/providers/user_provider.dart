@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
 
-class User {
-  final String name;
-  final String email;
-  final String password;
+import '../models/user_model.dart';
+import '../services/user_service.dart';
 
-  User({required this.name, required this.email, required this.password});
+class UserProvider with ChangeNotifier {
+  final userService = UserService();
 
-  @override
-  String toString() {
-    return 'User{name: $name, email: $email, password: $password}';
-  }
-}
+  List<UserModel> _userList = [];
+  bool _isLoading = false;
 
-class UserChangeNotifier extends ChangeNotifier {
-  User? _user;
+  // getter of user
+  List<UserModel> get userList => _userList; // <-- this is the getter
+  bool get isLoading => _isLoading;
 
-  User? get user => _user;
-
-  void setUser(User user) {
-    print(user.toString());
-    _user = user;
+  // setter of user
+  set userList(List<UserModel> userList) {
+    _userList = userList;
     notifyListeners();
+  }
+
+  // method to fetch users
+  Future<void> fetchUsers() async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      final users = await userService.getUsers();
+      userList = users;
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_management/helpers/base_change_notifier_provider.dart';
-
-import '../providers/post_change_notifier_provider.dart';
+import 'package:flutter_state_management/providers/post_provider.dart';
+import 'package:provider/provider.dart';
 
 class PostListPage extends StatelessWidget {
   const PostListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final postProvider = context.getProvider<PostChangeNotifierProvider>();
+    final postProvider = context.read<PostChangeNotifierProvider>();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => postProvider.fetchPosts(),
